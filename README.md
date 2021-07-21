@@ -5,7 +5,7 @@ RISC5 processor, written in the [Go programming language](https://golang.org).
 It is a port of [Peter De Wachter's emulator](https://github.com/pdewacht/oberon-risc-emu) from C to Go.
 
 Project Oberon is a design for a complete desktop computer system from scratch by
-[Niklas Wirth](https://people.inf.ethz.ch/wirth/) and
+[Niklaus Wirth](https://people.inf.ethz.ch/wirth/) and
 [Jürg Gutknecht](https://en.wikipedia.org/wiki/J%C3%BCrg_Gutknecht).
 It comprises a RISC CPU, a programming language and an operating system.
 
