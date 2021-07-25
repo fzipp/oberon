@@ -1,3 +1,7 @@
+// Copyright 2021 Frederik Zipp and others; see NOTICE file.
+// Use of this source code is governed by the ISC license that
+// can be found in the LICENSE file.
+
 // Dumps the ASCII content of Oberon texts.
 // Doesn't properly parse the files so doesn't work very well.
 package main
