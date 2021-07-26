@@ -156,7 +156,7 @@ func decompress(r *bufio.Reader) ([]byte, error) {
 
 		misprediction := (buf & 1) != 0
 		buf >>= 1
-		bits -= 1
+		bits--
 
 		var data byte
 		if !misprediction {
