@@ -116,9 +116,32 @@ func handleEvent(e canvas.Event, r *risc.RISC, ctx *canvas.Context) {
 		r.MouseButton(2, false)
 		r.MouseButton(3, false)
 	case canvas.KeyDownEvent:
-		fmt.Println(ev.KeyboardEvent)
+		if ev.Key == "Control" {
+			r.MouseButton(1, true)
+			return
+		}
+		if ev.Key == "Alt" {
+			r.MouseButton(2, true)
+			return
+		}
+		if ev.Key == "Meta" {
+			r.MouseButton(3, true)
+			return
+		}
 		r.KeyboardInput(ps2Encode(ev.KeyboardEvent, true))
 	case canvas.KeyUpEvent:
+		if ev.Key == "Control" {
+			r.MouseButton(1, false)
+			return
+		}
+		if ev.Key == "Alt" {
+			r.MouseButton(2, false)
+			return
+		}
+		if ev.Key == "Meta" {
+			r.MouseButton(3, false)
+			return
+		}
 		r.KeyboardInput(ps2Encode(ev.KeyboardEvent, false))
 	case canvas.CompositionUpdateEvent:
 		kbd := canvas.KeyboardEvent{Key: ev.Data}
