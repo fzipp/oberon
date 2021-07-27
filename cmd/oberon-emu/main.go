@@ -47,6 +47,14 @@ func run(ctx *canvas.Context, opt *options) {
 		r.SetLEDs(&ConsoleLEDs{})
 	}
 
+	if opt.bootFromSerial {
+		r.SetSwitches(1)
+	}
+
+	if opt.mem > 0 || opt.size != "" {
+		r.ConfigureMemory(opt.mem, opt.sizeRect.Dx(), opt.sizeRect.Dy())
+	}
+
 	disk, err := spi.NewDisk(opt.diskImageFile)
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "can't use disk image: %s", err)
@@ -61,10 +69,6 @@ func run(ctx *canvas.Context, opt *options) {
 			return
 		}
 		r.SetSerial(raw)
-	}
-
-	if opt.mem > 0 || opt.size != "" {
-		r.ConfigureMemory(opt.mem, opt.sizeRect.Dx(), opt.sizeRect.Dy())
 	}
 
 	fb := r.Framebuffer()

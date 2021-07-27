@@ -5,7 +5,6 @@
 package spi
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -39,7 +38,7 @@ func NewDisk(filename string) (*Disk, error) {
 	}
 
 	if filename == "" {
-		return nil, errors.New("empty filename")
+		return disk, nil
 	}
 
 	var err error

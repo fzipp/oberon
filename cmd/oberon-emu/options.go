@@ -45,8 +45,12 @@ func optionsFromFlags() (*options, error) {
 
 	flag.Parse()
 
-	if flag.NArg() < 1 {
-		return nil, errors.New("missing argument")
+	diskImageFile := ""
+	if !*bootFromSerial {
+		if flag.NArg() < 1 {
+			return nil, errors.New("missing argument")
+		}
+		diskImageFile = flag.Arg(0)
 	}
 
 	sizeRect := image.Rect(0, 0, risc.FramebufferWidth, risc.FramebufferHeight)
@@ -74,7 +78,7 @@ func optionsFromFlags() (*options, error) {
 		bootFromSerial: *bootFromSerial,
 		serialIn:       *serialIn,
 		serialOut:      *serialOut,
-		diskImageFile:  flag.Arg(0),
+		diskImageFile:  diskImageFile,
 	}, nil
 }
 
