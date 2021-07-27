@@ -5,38 +5,55 @@
 package serial
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"os"
 )
 
 type Raw struct {
-	r io.ReadCloser
-	w io.WriteCloser
+	in *os.File
+	r  *bufio.Reader
+	w  io.WriteCloser
 }
 
 func Open(filenameIn, filenameOut string) (*Raw, error) {
+	if filenameIn == "" {
+		filenameIn = os.DevNull
+	}
+	if filenameOut == "" {
+		filenameOut = os.DevNull
+	}
+
 	raw := &Raw{}
 
-	r, err := os.Open(filenameIn)
+	in, err := os.Open(filenameIn)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open serial input file: %w", err)
 	}
-	raw.r = r
+	raw.in = in
+	raw.r = bufio.NewReader(in)
 
-	w, err := os.OpenFile(filenameOut, os.O_RDWR, 0o666)
+	out, err := os.OpenFile(filenameOut, os.O_RDWR, 0o666)
 	if err != nil {
-		_ = r.Close()
+		_ = in.Close()
 		return nil, fmt.Errorf("failed to open serial output file: %w", err)
 	}
-	raw.w = w
+	raw.w = out
 
 	return raw, nil
 }
 
 func (r *Raw) ReadStatus() uint32 {
-	// TODO
-	return 0
+	_, err := r.r.ReadByte()
+	if err != nil {
+		return 2
+	}
+	err = r.r.UnreadByte()
+	if err != nil {
+		return 2
+	}
+	return 3
 }
 
 func (r *Raw) ReadData() uint32 {
@@ -58,7 +75,7 @@ func (r *Raw) WriteData(value uint32) {
 
 func (r *Raw) Close() error {
 	var err error
-	err = r.r.Close()
+	err = r.in.Close()
 	if err != nil {
 		return err
 	}

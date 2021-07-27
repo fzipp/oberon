@@ -54,6 +54,15 @@ func run(ctx *canvas.Context, opt *options) {
 	}
 	r.SetSPI(1, disk)
 
+	if opt.serialIn != "" || opt.serialOut != "" {
+		raw, err := serial.Open(opt.serialIn, opt.serialOut)
+		if err != nil {
+			_, _ = fmt.Fprintf(os.Stderr, "can't open serial I/O: %s", err)
+			return
+		}
+		r.SetSerial(raw)
+	}
+
 	if opt.mem > 0 || opt.size != "" {
 		r.ConfigureMemory(opt.mem, opt.sizeRect.Dx(), opt.sizeRect.Dy())
 	}
