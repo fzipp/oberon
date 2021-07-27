@@ -93,7 +93,7 @@ func New() *RISC {
 		displayStart: defaultDisplayStart,
 	}
 	columns := screenWidth / 32
-	r.damage = image.Rect(0, 0, columns, screenHeight)
+	r.damage = image.Rect(0, 0, columns-1, screenHeight-1)
 	r.Mem = make([]uint32, defaultMemSize/4)
 	r.framebuffer = Framebuffer{
 		Rect: image.Rect(0, 0, screenWidth, screenHeight),
@@ -109,7 +109,7 @@ func (r *RISC) ConfigureMemory(megabytesRAM, screenWidth, screenHeight int) {
 
 	r.displayStart = uint32(megabytesRAM << 20)
 	columns := screenWidth / 32
-	r.damage = image.Rect(0, 0, columns, screenHeight)
+	r.damage = image.Rect(0, 0, columns-1, screenHeight-1)
 
 	memSize := r.displayStart + uint32((screenWidth*screenHeight)/8)
 	r.Mem = make([]uint32, memSize/4)
