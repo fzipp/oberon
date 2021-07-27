@@ -30,61 +30,45 @@ const (
 	colorWhite = 0xfdf6e3
 )
 
-const (
-	maxHeight = 2048
-	maxWidth  = 2048
-)
-
 func main() {
-	fullscreen := flag.Bool("fullscreen", false, "Start the emulator in full screen mode")
-	zoom := flag.Float64("zoom", 0, "Scale the display in windowed mode to `REAL`")
-	leds := flag.Bool("leds", false, "Log LED state on stdout")
-	mem := flag.Int("mem", 0, "Set memory size in `MEGS`")
-	size := flag.String("size", "", "Set framebuffer size to `WIDTHxHEIGHT`")
-	bootFromSerial := flag.Bool("boot-from-serial", false, "Boot from serial line (disk image not required)")
-	serialIn := flag.String("serial-in", "", "Read serial input from `FILE`")
-	serialOut := flag.String("serial-out", "", "Read serial input from `FILE`")
-
-	flag.Parse()
-
-	if flag.NArg() < 1 {
+	opt, err := optionsFromFlags()
+	if err != nil {
 		flag.Usage()
 		os.Exit(1)
 	}
-
-	_ = bootFromSerial
-	_ = serialIn
-	_ = serialOut
 
 	r := risc.New()
 	r.SetSerial(&serial.PCLink{})
 	r.SetClipboard(&SDLClipboard{})
 
-	if *leds {
+	if opt.leds {
 		r.SetLEDs(&ConsoleLEDs{})
 	}
 
-	disk, err := spi.NewDisk(flag.Arg(0))
+	if opt.bootFromSerial {
+		r.SetSwitches(1)
+	}
+
+	if opt.mem > 0 || opt.size != "" {
+		r.ConfigureMemory(opt.mem, opt.sizeRect.Dx(), opt.sizeRect.Dy())
+	}
+
+	disk, err := spi.NewDisk(opt.diskImageFile)
 	check(err)
 	r.SetSPI(1, disk)
 
-	riscRect := sdl.Rect{
-		W: risc.FramebufferWidth,
-		H: risc.FramebufferHeight,
-	}
-
-	if *size != "" {
-		var w, h int
-		_, err := fmt.Sscanf(*size, "%dx%d", &w, &h)
+	if opt.serialIn != "" || opt.serialOut != "" {
+		raw, err := serial.Open(opt.serialIn, opt.serialOut)
 		if err != nil {
-			flag.Usage()
+			_, _ = fmt.Fprintf(os.Stderr, "can't open serial I/O: %s", err)
+			return
 		}
-		riscRect.W = int32(clamp(w, 32, maxWidth)) &^ 31
-		riscRect.H = int32(clamp(h, 32, maxHeight))
+		r.SetSerial(raw)
 	}
 
-	if *mem > 0 || *size != "" {
-		r.ConfigureMemory(*mem, int(riscRect.W), int(riscRect.H))
+	riscRect := sdl.Rect{
+		W: int32(opt.sizeRect.Dx()),
+		H: int32(opt.sizeRect.Dy()),
 	}
 
 	if err := sdl.Init(sdl.INIT_VIDEO); err != nil {
@@ -98,25 +82,25 @@ func main() {
 
 	windowFlags := sdl.WINDOW_HIDDEN
 	display := 0
-	if *fullscreen {
+	if opt.fullscreen {
 		windowFlags |= sdl.WINDOW_FULLSCREEN_DESKTOP
 		display, err = bestDisplay(riscRect)
 		check(err)
 	}
-	if *zoom == 0 {
+	if opt.zoom == 0 {
 		bounds, err := sdl.GetDisplayBounds(display)
 		check(err)
 		if bounds.H >= riscRect.H*2 && bounds.W >= riscRect.W*2 {
-			*zoom = 2
+			opt.zoom = 2
 		} else {
-			*zoom = 1
+			opt.zoom = 1
 		}
 	}
 	window, err := sdl.CreateWindow("Project Oberon",
 		sdl.WINDOWPOS_UNDEFINED,
 		sdl.WINDOWPOS_UNDEFINED,
-		int32(float64(riscRect.W)*(*zoom)),
-		int32(float64(riscRect.H)*(*zoom)),
+		int32(float64(riscRect.W)*(opt.zoom)),
+		int32(float64(riscRect.H)*(opt.zoom)),
 		uint32(windowFlags))
 	check(err)
 	renderer, err := sdl.CreateRenderer(window, -1, 0)
@@ -192,8 +176,8 @@ func main() {
 				case actionReset:
 					r.Reset()
 				case actionToggleFullscreen:
-					*fullscreen = !*fullscreen
-					if *fullscreen {
+					opt.fullscreen = !opt.fullscreen
+					if opt.fullscreen {
 						err = window.SetFullscreen(sdl.WINDOW_FULLSCREEN_DESKTOP)
 					} else {
 						err = window.SetFullscreen(0)
@@ -322,16 +306,6 @@ func bestDisplay(rect sdl.Rect) (int, error) {
 		}
 	}
 	return best, nil
-}
-
-func clamp(x, min, max int) int {
-	if x < min {
-		return min
-	}
-	if x > max {
-		return max
-	}
-	return x
 }
 
 func check(err error) {
