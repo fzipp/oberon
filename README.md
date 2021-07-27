@@ -32,6 +32,26 @@ This is the Project Oberon user interface directly after start:
 
 ![Project Oberon](doc/screenshot1.png?raw=true "Project Oberon directly after start")
 
+## Using Oberon
+
+[How to use the Oberon System](https://people.inf.ethz.ch/wirth/ProjectOberon/UsingOberon.pdf) (PDF)
+
+Oberon's user interface is designed for use with a three-button mouse,
+but the emulator additionally allows to simulate all three mouse buttons via
+the keyboard.
+
+| Mouse button | Function           | Mac keyboard | PC keyboard |
+|--------------|--------------------|--------------|-------------|
+| Left         | Set caret (cursor) | ⌃ control    | Ctrl        |
+| Middle       | Execute command    | ⌥ option     | Alt         |
+| Right        | Select text        | ⌘ command    | Meta (Win)  |
+
+
+| Key   | Function            |
+|-------|---------------------|
+| Esc   | Undo all selections |
+| F1    | Set global marker   |
+
 ## License
 
 This project is free and open source software licensed under the
