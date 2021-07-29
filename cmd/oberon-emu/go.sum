@@ -1,4 +1,4 @@
-github.com/fzipp/oberon v0.1.0 h1:YhLiU1UqMXBJBxAnrPakHKU/Ga6EMoJ5TEQE/qIDwwg=
-github.com/fzipp/oberon v0.1.0/go.mod h1:oYuMFsCTnNCKtYbC9RLFixf1sBXBjrXZ3V0bAOnCBLU=
+github.com/fzipp/oberon v0.2.0 h1:58LO586GwVXGqEmvI++YFyd09da4rIUdLcL4gb7ZJVw=
+github.com/fzipp/oberon v0.2.0/go.mod h1:oYuMFsCTnNCKtYbC9RLFixf1sBXBjrXZ3V0bAOnCBLU=
 github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0Ufc=
 github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
