@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -24,7 +25,12 @@ func main() {
 
 	in := os.Stdin
 	if flag.NArg() > 0 {
-		in, err = os.Open(flag.Arg(0))
+		path := flag.Arg(0)
+		verilogEnv := os.Getenv("VERILOG")
+		if verilogEnv != "" {
+			path = filepath.Join(verilogEnv, path)
+		}
+		in, err = os.Open(path)
 		check(err)
 		defer in.Close()
 	}
