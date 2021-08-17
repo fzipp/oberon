@@ -4,7 +4,11 @@
 
 package risc
 
-import "image"
+import (
+	"image"
+
+	"github.com/fzipp/oberon/risc/internal/fp"
+)
 
 const (
 	FramebufferWidth  = 1024
@@ -305,18 +309,18 @@ func (r *RISC) singleStep() error {
 					r.H = Rb % n
 				}
 			} else {
-				q := makeIdiv(Rb, n, IR&uBit > 0)
-				Ra = q.quot
-				r.H = q.rem
+				q := fp.Idiv(Rb, n, IR&uBit > 0)
+				Ra = q.Quot
+				r.H = q.Rem
 			}
 		case opFAD:
-			Ra = fpAdd(Rb, n, IR&uBit > 0, IR&vBit > 0)
+			Ra = fp.Add(Rb, n, IR&uBit > 0, IR&vBit > 0)
 		case opFSB:
-			Ra = fpAdd(Rb, n^0x80000000, IR&uBit > 0, IR&vBit > 0)
+			Ra = fp.Add(Rb, n^0x80000000, IR&uBit > 0, IR&vBit > 0)
 		case opFML:
-			Ra = fpMul(Rb, n)
+			Ra = fp.Mul(Rb, n)
 		case opFDV:
-			Ra = fpDiv(Rb, n)
+			Ra = fp.Div(Rb, n)
 		default:
 			panic("unreachable")
 		}

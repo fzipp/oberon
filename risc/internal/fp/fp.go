@@ -2,9 +2,9 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
-package risc
+package fp
 
-func fpAdd(x, y uint32, u, v bool) uint32 {
+func Add(x, y uint32, u, v bool) uint32 {
 	xs := (x & 0x80000000) != 0
 	var xe uint32
 	var x0 int32
@@ -100,7 +100,7 @@ func fpAdd(x, y uint32, u, v bool) uint32 {
 	}
 }
 
-func fpMul(x, y uint32) uint32 {
+func Mul(x, y uint32) uint32 {
 	sign := (x ^ y) & 0x80000000
 	xe := (x >> 23) & 0xFF
 	ye := (y >> 23) & 0xFF
@@ -129,7 +129,7 @@ func fpMul(x, y uint32) uint32 {
 	}
 }
 
-func fpDiv(x, y uint32) uint32 {
+func Div(x, y uint32) uint32 {
 	sign := (x ^ y) & 0x80000000
 	xe := (x >> 23) & 0xFF
 	ye := (y >> 23) & 0xFF
@@ -161,11 +161,11 @@ func fpDiv(x, y uint32) uint32 {
 	}
 }
 
-type idiv struct {
-	quot, rem uint32
+type IdivResult struct {
+	Quot, Rem uint32
 }
 
-func makeIdiv(x, y uint32, signedDiv bool) idiv {
+func Idiv(x, y uint32, signedDiv bool) IdivResult {
 	sign := (int32(x) < 0) && signedDiv
 	var x0 uint32
 	if sign {
@@ -185,13 +185,20 @@ func makeIdiv(x, y uint32, signedDiv bool) idiv {
 		}
 	}
 
-	d := idiv{quot: uint32(RQ), rem: uint32(RQ >> 32)}
+	d := IdivResult{Quot: uint32(RQ), Rem: uint32(RQ >> 32)}
 	if sign {
-		d.quot = -d.quot
-		if d.rem > 0 {
-			d.quot--
-			d.rem = y - d.rem
+		d.Quot = -d.Quot
+		if d.Rem > 0 {
+			d.Quot--
+			d.Rem = y - d.Rem
 		}
 	}
 	return d
+}
+
+func b2i(b bool) uint32 {
+	if b {
+		return 1
+	}
+	return 0
 }
