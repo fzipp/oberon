@@ -18,5 +18,5 @@ Use `go generate` to transpile the Verilog sources to Go:
 
 The tests are implemented as main programs in the following sub-directories:
 
-    add  div  idiv  mul
+    add  div  idiv  mul  flr  flt
 
