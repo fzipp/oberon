@@ -2,6 +2,11 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
+// Package fp implements floating-point arithmetic operations for the
+// Oberon RISC emulator.
+//
+// See http://people.inf.ethz.ch/wirth/ProjectOberon/PO.Computer.pdf
+// section 16.3. "Floating-point arithmetic".
 package fp
 
 func Add(x, y uint32, u, v bool) uint32 {

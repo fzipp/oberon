@@ -2,6 +2,7 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
+// Command v2go translates Verilog source code to Go.
 package main
 
 import (
@@ -17,8 +18,23 @@ import (
 	"unicode"
 )
 
+func usage() {
+	fail(`Translates Verilog source code to Go.
+
+Usage:
+    v2go [-o go_file] [verilog_file]
+
+    If no Verilog file is specified the tool reads from the standard input.
+    If the VERILOG environment variable is set 'verilog_file' is interpreted
+    relative to the path of this environment variable.
+
+Flags:
+    -o   Specifies the output file (Go). Default: standard output`)
+}
+
 func main() {
 	oFlag := flag.String("o", "", "output `file` (Go)")
+	flag.Usage = usage
 	flag.Parse()
 
 	var err error

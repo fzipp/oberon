@@ -2,6 +2,9 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
+// Command numbers generates a Go file containing a slice of uint32 numbers
+// as test input for the Oberon RISC emulator's floating-point arithmetic
+// operations.
 package main
 
 import (
@@ -11,9 +14,22 @@ import (
 	"os"
 )
 
+func usage() {
+	fail(`Generates a Go file containing a slice of uint32 numbers as test
+input for the Oberon RISC emulator's floating-point arithmetic operations.
+
+Usage:
+    numbers [-o go_file] [-n count]
+
+Flags:
+    -o   The output file (Go). Default: standard output
+    -n   The length of the generated slice of numbers. Default: 25000`)
+}
+
 func main() {
 	nFlag := flag.Int("n", 25000, "`count`")
 	oFlag := flag.String("o", "", "output `file` (Go)")
+	flag.Usage = usage
 	flag.Parse()
 
 	var err error
@@ -27,13 +43,13 @@ func main() {
 
 	var numbers []uint32
 	for e := uint32(0); e < 256; e++ {
-		numbers = append(numbers, (e << 23) | 0)
-		numbers = append(numbers, (e << 23) | 1)
-		numbers = append(numbers, (e << 23) | 0x7fffff)
-		numbers = append(numbers, (e << 23) | 0x7ffffe)
+		numbers = append(numbers, (e<<23)|0)
+		numbers = append(numbers, (e<<23)|1)
+		numbers = append(numbers, (e<<23)|0x7fffff)
+		numbers = append(numbers, (e<<23)|0x7ffffe)
 	}
 	for _, x := range numbers {
-		numbers = append(numbers, x | 0x80000000)
+		numbers = append(numbers, x|0x80000000)
 	}
 	restCount := count - len(numbers)
 	for x := 0; x < restCount; x++ {
@@ -57,7 +73,11 @@ var Numbers = []uint32{
 
 func check(err error) {
 	if err != nil {
-		_, _ = fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		fail(err)
 	}
+}
+
+func fail(msg interface{}) {
+	_, _ = fmt.Fprintln(os.Stderr, msg)
+	os.Exit(1)
 }
