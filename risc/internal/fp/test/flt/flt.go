@@ -35,7 +35,7 @@ func main() {
 	count := 0
 	errors := 0
 	for _, a := range test.Numbers {
-		b := uint32(0x4B00<<16)
+		b := uint32(0x4B00 << 16)
 		want := vAdd(a, b)
 		got := fp.Add(a, b, true, false)
 		if got != want {
