@@ -29,7 +29,7 @@ func ListenAndServe(addr string, run func(*Context), size image.Rectangle) error
 		width:               size.Dx(),
 		height:              size.Dy(),
 		backgroundColor:     color.Black,
-		eventMask:           maskMouseMove | maskMouseDown | maskMouseUp | maskKeyDown | maskKeyUp | maskTouchMove | CompositionEvent{}.mask(),
+		eventMask:           maskMouseMove | maskMouseDown | maskMouseUp | maskKeyDown | maskKeyUp | maskTouchMove | maskClipboardChange,
 		cursorDisabled:      true,
 		contextMenuDisabled: true,
 	}

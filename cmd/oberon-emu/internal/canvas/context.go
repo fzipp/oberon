@@ -38,6 +38,11 @@ const (
 	colorWhite = 0xfdf6e3ff
 )
 
+const (
+	bUpdateDisplay byte = 1 + iota
+	bClipboardWriteText
+)
+
 func (ctx *Context) UpdateDisplay(fb *risc.Framebuffer, r image.Rectangle) {
 	if r.Min.Y > r.Max.Y {
 		return
@@ -51,6 +56,7 @@ func (ctx *Context) UpdateDisplay(fb *risc.Framebuffer, r image.Rectangle) {
 	w := uint32((r.Max.X - r.Min.X + 1) * 32)
 	h := uint32(r.Max.Y - r.Min.Y + 1)
 
+	ctx.buf.addByte(bUpdateDisplay)
 	ctx.buf.addUint32(x)
 	ctx.buf.addUint32(y)
 	ctx.buf.addUint32(w)
@@ -72,6 +78,12 @@ func (ctx *Context) UpdateDisplay(fb *risc.Framebuffer, r image.Rectangle) {
 			}
 		}
 	}
+	ctx.Flush()
+}
+
+func (ctx *Context) ClipboardWriteText(text string) {
+	ctx.buf.addByte(bClipboardWriteText)
+	ctx.buf.addString(text)
 	ctx.Flush()
 }
 

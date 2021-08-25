@@ -17,6 +17,18 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    function pollClipboardChange(onChange) {
+        let clipboardText = '';
+        return setInterval(function() {
+            navigator.clipboard.readText().then(function(clipText) {
+                if (clipText !== clipboardText) {
+                    clipboardText = clipText;
+                    onChange({data: clipText});
+                }
+            });
+        }, 1000);
+    }
+
     function configFrom(dataset) {
         return {
             drawUrl: absoluteWebSocketUrl(dataset["websocketDrawUrl"]),
@@ -106,13 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
             handlers["touchcancel"] = sendTouchEvent(13);
         }
         if (eventMask & 8192) {
-            handlers["compositionstart"] = sendCompositionEvent(14);
-        }
-        if (eventMask & 16384) {
-            handlers["compositionupdate"] = sendCompositionEvent(15);
-        }
-        if (eventMask & 32768) {
-            handlers["compositionend"] = sendCompositionEvent(16);
+            pollClipboardChange(sendClipboardEvent(14));
         }
 
         Object.keys(handlers).forEach(function (type) {
@@ -203,7 +209,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function sendKeyEvent(eventType) {
             return function (event) {
-                console.log(event);
                 event.preventDefault();
                 const keyBytes = new TextEncoder().encode(event.key);
                 const eventMessage = new ArrayBuffer(6 + keyBytes.byteLength);
@@ -218,11 +223,8 @@ document.addEventListener("DOMContentLoaded", function () {
             };
         }
 
-        function sendCompositionEvent(eventType) {
-            console.log('composition event enabled: ' + eventType);
+        function sendClipboardEvent(eventType) {
             return function (event) {
-                console.log('composition event');
-                event.preventDefault();
                 const dataBytes = new TextEncoder().encode(event.data);
                 const eventMessage = new ArrayBuffer(5 + dataBytes.byteLength);
                 const data = new DataView(eventMessage);
@@ -276,16 +278,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function draw(ctx, data) {
-        const x = data.getUint32(0);
-        const y = data.getUint32(4);
-        const width = data.getUint32(8);
-        const height = data.getUint32(12);
-        const len = width * height * 4;
-        const bufferOffset = data.byteOffset + 16;
-        const buffer = data.buffer.slice(bufferOffset, bufferOffset + len);
-        const array = new Uint8ClampedArray(buffer);
-        const imageData = new ImageData(array, width, height);
-        ctx.putImageData(imageData, x, y);
-        return 16 + len;
+        switch (data.getUint8(0)) {
+            case 1:
+                const x = data.getUint32(1);
+                const y = data.getUint32(5);
+                const width = data.getUint32(9);
+                const height = data.getUint32(13);
+                const len = width * height * 4;
+                const bufferOffset = data.byteOffset + 17;
+                const buffer = data.buffer.slice(bufferOffset, bufferOffset + len);
+                const array = new Uint8ClampedArray(buffer);
+                const imageData = new ImageData(array, width, height);
+                ctx.putImageData(imageData, x, y);
+                return 17 + len;
+            case 2:
+                const text = getString(data, 1);
+                navigator.clipboard.writeText(text.value);
+                return 1 + text.byteLen;
+        }
+        return 1;
     }
 });
+
+function getString(data, offset) {
+    const stringLen = data.getUint32(offset);
+    const stringBegin = data.byteOffset + offset + 4;
+    const stringEnd = stringBegin + stringLen;
+    return {
+        value: new TextDecoder().decode(data.buffer.slice(stringBegin, stringEnd)),
+        byteLen: 4 + stringLen
+    };
+}

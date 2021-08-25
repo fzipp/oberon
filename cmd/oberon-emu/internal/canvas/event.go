@@ -213,43 +213,13 @@ type TouchCancelEvent struct{ TouchEvent }
 
 func (e TouchCancelEvent) mask() eventMask { return maskTouchCancel }
 
-// The CompositionEvent represents events that occur due to the user indirectly
-// entering text.
-type CompositionEvent struct {
+type ClipboardEvent struct {
 	Data string
 }
 
-func (e CompositionEvent) mask() eventMask {
-	return maskCompositionStart | maskCompositionUpdate | maskCompositionEnd
-}
+type ClipboardChangeEvent struct{ ClipboardEvent }
 
-// The CompositionStartEvent is fired when a text composition system such as an
-// input method editor starts a new composition session.
-//
-// For example, this event could be fired after a user starts entering a
-// Chinese character using a Pinyin IME.
-type CompositionStartEvent struct{ CompositionEvent }
-
-func (e CompositionStartEvent) mask() eventMask { return maskCompositionStart }
-
-// The CompositionUpdateEvent is fired when a new character is received in the
-// context of a text composition session controlled by a text composition
-// system such as an input method editor.
-//
-// For example, this event could be fired while a user enters a Chinese
-// character using a Pinyin IME.
-type CompositionUpdateEvent struct{ CompositionEvent }
-
-func (e CompositionUpdateEvent) mask() eventMask { return maskCompositionUpdate }
-
-// The CompositionEndEvent is fired when a text composition system such as an
-// input method editor completes or cancels the current composition session.
-//
-// For example, this event could be fired after a user finishes entering a
-// Chinese character using a Pinyin IME.
-type CompositionEndEvent struct{ CompositionEvent }
-
-func (e CompositionEndEvent) mask() eventMask { return maskCompositionEnd }
+func (e ClipboardChangeEvent) mask() eventMask { return maskClipboardChange }
 
 type modifierKeys byte
 
@@ -305,9 +275,7 @@ const (
 	maskTouchMove
 	maskTouchEnd
 	maskTouchCancel
-	maskCompositionStart
-	maskCompositionUpdate
-	maskCompositionEnd
+	maskClipboardChange
 )
 
 // MouseButtons is a number representing one or more buttons. For more than
@@ -345,9 +313,7 @@ const (
 	evTouchMove
 	evTouchEnd
 	evTouchCancel
-	evCompositionStart
-	evCompositionUpdate
-	evCompositionEnd
+	evClipboardChange
 )
 
 func decodeEvent(p []byte) (Event, error) {
@@ -388,12 +354,8 @@ func decodeEventBuf(buf *buffer) (Event, error) {
 		return TouchEndEvent{decodeTouchEvent(buf)}, nil
 	case evTouchCancel:
 		return TouchCancelEvent{decodeTouchEvent(buf)}, nil
-	case evCompositionStart:
-		return CompositionStartEvent{decodeCompositionEvent(buf)}, nil
-	case evCompositionUpdate:
-		return CompositionUpdateEvent{decodeCompositionEvent(buf)}, nil
-	case evCompositionEnd:
-		return CompositionEndEvent{decodeCompositionEvent(buf)}, nil
+	case evClipboardChange:
+		return ClipboardChangeEvent{decodeClipboardEvent(buf)}, nil
 	}
 	return nil, errUnknownEventType{unknownType: eventType}
 }
@@ -450,8 +412,8 @@ func decodeTouch(buf *buffer) Touch {
 	}
 }
 
-func decodeCompositionEvent(buf *buffer) CompositionEvent {
-	return CompositionEvent{
+func decodeClipboardEvent(buf *buffer) ClipboardEvent {
+	return ClipboardEvent{
 		Data: buf.readString(),
 	}
 }

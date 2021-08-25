@@ -42,6 +42,8 @@ func main() {
 func run(ctx *canvas.Context, opt *options) {
 	r := risc.New()
 	r.SetSerial(&serial.PCLink{})
+	clipboard := &Clipboard{ctx: ctx}
+	r.SetClipboard(clipboard)
 
 	if opt.leds {
 		r.SetLEDs(&ConsoleLEDs{})
@@ -81,7 +83,7 @@ func run(ctx *canvas.Context, opt *options) {
 			if _, ok := event.(canvas.CloseEvent); ok {
 				return
 			}
-			handleEvent(event, r, ctx)
+			handleEvent(event, r, ctx, clipboard)
 		default:
 			r.SetTime(uint32(frameStart - riscStart))
 			err := r.Run(cpuHz / fps)
@@ -102,7 +104,7 @@ func run(ctx *canvas.Context, opt *options) {
 	}
 }
 
-func handleEvent(e canvas.Event, r *risc.RISC, ctx *canvas.Context) {
+func handleEvent(e canvas.Event, r *risc.RISC, ctx *canvas.Context, clipboard *Clipboard) {
 	switch ev := e.(type) {
 	case canvas.MouseMoveEvent:
 		r.MouseMoved(ev.X, ctx.CanvasHeight()-ev.Y)
@@ -156,10 +158,8 @@ func handleEvent(e canvas.Event, r *risc.RISC, ctx *canvas.Context) {
 			return
 		}
 		r.KeyboardInput(ps2Encode(ev.KeyboardEvent, false))
-	case canvas.CompositionUpdateEvent:
-		kbd := canvas.KeyboardEvent{Key: ev.Data}
-		r.KeyboardInput(ps2Encode(kbd, true))
-		r.KeyboardInput(ps2Encode(kbd, false))
+	case canvas.ClipboardChangeEvent:
+		clipboard.setText(ev.Data)
 	}
 }
 
