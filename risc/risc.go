@@ -379,7 +379,7 @@ func (r *RISC) singleStep() error {
 		case 0b0110: // LE: less or equal
 			t = t != ((r.N != r.V) || r.Z)
 		case 0b0111: // always
-			t = t != true
+			t = !t
 		default:
 			panic("unreachable")
 		}
