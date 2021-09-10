@@ -2,6 +2,8 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
+// Command oberon-emu-sdl is an emulator for the Project Oberon RISC machine.
+// It uses SDL to render the screen.
 package main
 
 import (

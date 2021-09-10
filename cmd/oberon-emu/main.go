@@ -2,6 +2,9 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
+// Command oberon-emu is an emulator for the Project Oberon RISC machine.
+// It starts a WebSocket server to render the screen in a web browser on an
+// HTML canvas.
 package main
 
 import (

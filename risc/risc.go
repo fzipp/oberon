@@ -2,6 +2,7 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
+// Package risc implements emulation of the Project Oberon RISC processor.
 package risc
 
 import (

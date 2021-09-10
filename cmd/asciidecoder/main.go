@@ -2,7 +2,7 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
-// Decodes Oberon 'AsciiCoder.DecodeFiles' archives
+// Command asciidecoder decodes Oberon 'AsciiCoder.DecodeFiles' archives.
 package main
 
 import (

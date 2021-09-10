@@ -2,8 +2,8 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
-// Converts the content of Oberon texts (.Text, .Mod, .Tool) to plain text
-// with Unix-style line endings.
+// Command ob2unix converts the content of Oberon texts (.Text, .Mod, .Tool)
+// to plain text with Unix-style line endings.
 //
 //  - Drops the file header
 //  - Converts line endings from CR to LF
