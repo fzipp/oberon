@@ -45,6 +45,14 @@ The converted plain text is written to the standard output.
 If the input is not an Oberon text it is written to the output unchanged.`)
 }
 
+var charMapping = [...]rune{
+	'Ä', 'Ö', 'Ü',
+	'ä', 'ö', 'ü',
+	'â', 'ê', 'î', 'ô', 'û',
+	'à', 'è', 'ì', 'ò', 'ù',
+	'é', 'ë', 'ï', 'ç', 'á', 'ñ',
+}
+
 func main() {
 	var err error
 
@@ -73,61 +81,18 @@ func main() {
 
 	p = skipHeader(p)
 	for _, b := range p {
-		switch b {
-		case '\r', '\n':
+		switch {
+		case b == '\r', b == '\n':
 			err = out.WriteByte('\n')
-		case '\t':
+		case b == '\t':
 			_, err = out.Write([]byte("  "))
-		case 0x80:
-			_, err = out.WriteRune('Ä')
-		case 0x81:
-			_, err = out.WriteRune('Ö')
-		case 0x82:
-			_, err = out.WriteRune('Ü')
-		case 0x83:
-			_, err = out.WriteRune('ä')
-		case 0x84:
-			_, err = out.WriteRune('ö')
-		case 0x85:
-			_, err = out.WriteRune('ü')
-		case 0x86:
-			_, err = out.WriteRune('â')
-		case 0x87:
-			_, err = out.WriteRune('ê')
-		case 0x88:
-			_, err = out.WriteRune('î')
-		case 0x89:
-			_, err = out.WriteRune('ô')
-		case 0x8A:
-			_, err = out.WriteRune('û')
-		case 0x8B:
-			_, err = out.WriteRune('à')
-		case 0x8C:
-			_, err = out.WriteRune('è')
-		case 0x8D:
-			_, err = out.WriteRune('ì')
-		case 0x8E:
-			_, err = out.WriteRune('ò')
-		case 0x8F:
-			_, err = out.WriteRune('ù')
-		case 0x90:
-			_, err = out.WriteRune('é')
-		case 0x91:
-			_, err = out.WriteRune('ë')
-		case 0x92:
-			_, err = out.WriteRune('ï')
-		case 0x93:
-			_, err = out.WriteRune('ç')
-		case 0x94:
-			_, err = out.WriteRune('á')
-		case 0x95:
-			_, err = out.WriteRune('ñ')
-		case 0xAB:
+		case b < 32:
+			continue
+		case 0x80 <= b && b <= 0x95:
+			_, err = out.WriteRune(charMapping[b-0x80])
+		case b == 0xAB:
 			_, err = out.WriteRune('ß')
 		default:
-			if b < 32 {
-				continue
-			}
 			err = out.WriteByte(b)
 		}
 		check(err)
