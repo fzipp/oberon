@@ -12,6 +12,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
+	"runtime"
 	"time"
 
 	"github.com/fzipp/oberon/risc"
@@ -33,7 +35,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("Visit " + httpLink(opt.http) + " in a web browser")
+	url := httpLink(opt.http)
+	if opt.open && startBrowser(url) {
+		fmt.Println("Listening on " + url)
+	} else {
+		fmt.Println("Visit " + url + " in a web browser")
+	}
+
 	err = canvas.ListenAndServe(opt.http, func(ctx *canvas.Context) {
 		run(ctx, opt)
 	}, opt.sizeRect)
@@ -175,4 +183,21 @@ func httpLink(addr string) string {
 		addr = "localhost" + addr
 	}
 	return "http://" + addr
+}
+
+// startBrowser tries to open the URL in a browser
+// and reports whether it succeeds.
+func startBrowser(url string) bool {
+	// try to start the browser
+	var args []string
+	switch runtime.GOOS {
+	case "darwin":
+		args = []string{"open"}
+	case "windows":
+		args = []string{"cmd", "/c", "start"}
+	default:
+		args = []string{"xdg-open"}
+	}
+	cmd := exec.Command(args[0], append(args[1:], url)...)
+	return cmd.Start() == nil
 }

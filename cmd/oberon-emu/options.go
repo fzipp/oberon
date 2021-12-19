@@ -20,6 +20,7 @@ const (
 
 type options struct {
 	http           string
+	open           bool
 	fullscreen     bool
 	zoom           float64
 	leds           bool
@@ -42,6 +43,7 @@ func optionsFromFlags() (*options, error) {
 	bootFromSerial := flag.Bool("boot-from-serial", false, "Boot from serial line (disk image not required)")
 	serialIn := flag.String("serial-in", "", "Read serial input from `FILE`")
 	serialOut := flag.String("serial-out", "", "Read serial input from `FILE`")
+	open := flag.Bool("open", true, "Try to open browser")
 
 	flag.Parse()
 
@@ -69,6 +71,7 @@ func optionsFromFlags() (*options, error) {
 
 	return &options{
 		http:           *http,
+		open:           *open,
 		fullscreen:     *fullscreen,
 		zoom:           *zoom,
 		leds:           *leds,
