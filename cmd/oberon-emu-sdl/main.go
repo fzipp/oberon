@@ -129,7 +129,7 @@ func main() {
 	done := false
 	mouseWasOffscreen := false
 	for !done {
-		frameStart := sdl.GetTicks()
+		frameStart := sdl.GetTicks64()
 
 		for {
 			event := sdl.PollEvent()
@@ -188,7 +188,7 @@ func main() {
 				case actionQuit:
 					_, err = sdl.PushEvent(&sdl.QuitEvent{
 						Type:      sdl.QUIT,
-						Timestamp: sdl.GetTicks(),
+						Timestamp: uint32(sdl.GetTicks64()),
 					})
 					check(err)
 				case actionFakeMouse1:
@@ -203,7 +203,7 @@ func main() {
 			}
 		}
 
-		r.SetTime(frameStart)
+		r.SetTime(uint32(frameStart))
 		err = r.Run(cpuHz / fps)
 		if err != nil {
 			if riscErr, ok := err.(*risc.Error); ok {
@@ -221,7 +221,7 @@ func main() {
 		check(err)
 		renderer.Present()
 
-		frameEnd := sdl.GetTicks()
+		frameEnd := sdl.GetTicks64()
 		delay := int(frameStart) + 1000/fps - int(frameEnd)
 		if delay > 0 {
 			sdl.Delay(uint32(delay))
