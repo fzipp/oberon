@@ -5,14 +5,15 @@
 // Command ob2unix converts the content of Oberon texts (.Text, .Mod, .Tool)
 // to plain text with Unix-style line endings.
 //
-//  - Drops the file header
-//  - Converts line endings from CR to LF
-//  - Replaces each tab character by two spaces
-//  - Removes all other control characters
-//  - Converts extended Latin characters with diacritics to UTF-8
+//   - Drops the file header
+//   - Converts line endings from CR to LF
+//   - Replaces each tab character by two spaces
+//   - Removes all other control characters
+//   - Converts extended Latin characters with diacritics to UTF-8
 //
 // Usage:
-//    ob2unix [oberon_text_file]
+//
+//	ob2unix [oberon_text_file]
 //
 // If no file is specified the command reads its input from the standard input.
 // The converted plain text is written to the standard output.
