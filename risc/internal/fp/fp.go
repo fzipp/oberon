@@ -5,7 +5,7 @@
 // Package fp implements floating-point arithmetic operations for the
 // Oberon RISC emulator.
 //
-// See http://people.inf.ethz.ch/wirth/ProjectOberon/PO.Computer.pdf
+// See https://people.inf.ethz.ch/wirth/ProjectOberon/PO.Computer.pdf
 // section 16.3. "Floating-point arithmetic".
 package fp
 

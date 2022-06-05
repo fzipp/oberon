@@ -5,7 +5,7 @@
 package test
 
 // The Verilog (.v) files can be downloaded at
-// http://people.inf.ethz.ch/wirth/ProjectOberon/index.html
+// https://people.inf.ethz.ch/wirth/ProjectOberon/index.html
 //go:generate go run v2go/v2go.go -o add/add_gen.go FPAdder.v
 //go:generate go run v2go/v2go.go -o flr/add_gen.go FPAdder.v
 //go:generate go run v2go/v2go.go -o flt/add_gen.go FPAdder.v
