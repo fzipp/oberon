@@ -52,6 +52,13 @@ the keyboard.
 | Esc   | Undo all selections |
 | F1    | Set global marker   |
 
+## Oberon Compiler
+
+Project Oberon contains Wirth's Oberon compiler written in Oberon.
+If you're interested in an Oberon compiler written in Go check out
+[oberon-compiler](https://github.com/fzipp/oberon-compiler), which is a port
+of Wirth's compiler to Go.
+
 ## License
 
 This project is free and open source software licensed under the
