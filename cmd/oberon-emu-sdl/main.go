@@ -14,6 +14,7 @@ import (
 	"log"
 	"math"
 	"os"
+	"unsafe"
 
 	"github.com/fzipp/oberon/risc"
 	"github.com/fzipp/oberon/serial"
@@ -286,7 +287,7 @@ func updateTexture(fb *risc.Framebuffer, damage image.Rectangle, texture *sdl.Te
 		W: int32((damage.Max.X - damage.Min.X + 1) * 32),
 		H: int32(damage.Max.Y - damage.Min.Y + 1),
 	}
-	return texture.Update(&rect, pixelBuf[:], int(rect.W)*4)
+	return texture.Update(&rect, unsafe.Pointer(&pixelBuf), int(rect.W)*4)
 }
 
 func bestDisplay(rect sdl.Rect) (int, error) {
