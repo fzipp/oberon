@@ -8,7 +8,7 @@ then comparing the emulator implementation against the Verilog implementation.
 
 Set the `VERILOG` environment variable to the directory with the Verilog
 sources. You can download the Verilog sources from:
-http://people.inf.ethz.ch/wirth/ProjectOberon/index.html
+https://people.inf.ethz.ch/wirth/ProjectOberon/index.html
 
 The following files are required:
 
