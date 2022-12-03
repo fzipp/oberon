@@ -204,7 +204,7 @@ func check(err error) {
 	}
 }
 
-func fail(message interface{}) {
+func fail(message any) {
 	_, _ = fmt.Fprintln(os.Stderr, message)
 	os.Exit(1)
 }

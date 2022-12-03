@@ -77,7 +77,7 @@ func check(err error) {
 	}
 }
 
-func fail(msg interface{}) {
+func fail(msg any) {
 	_, _ = fmt.Fprintln(os.Stderr, msg)
 	os.Exit(1)
 }

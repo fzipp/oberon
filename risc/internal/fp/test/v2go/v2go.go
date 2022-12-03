@@ -100,7 +100,7 @@ func (s *scanner) skipWhitespaceAndComments(pos int) {
 	s.nextPos = pos + match[0][1]
 }
 
-func (s *scanner) next() (token string, value interface{}) {
+func (s *scanner) next() (token string, value any) {
 	s.pos = s.nextPos
 	groups, _, end := findSubmatchGroups(scanRegexp, s.str[s.pos:])
 	if groups == nil {
@@ -170,10 +170,10 @@ type parser struct {
 	names         map[string]bits
 	registers     map[string]bits
 	registerNames []string
-	bitByBit      map[string][]interface{}
+	bitByBit      map[string][]any
 	scanner       *scanner
 	token         string
-	value         interface{}
+	value         any
 	w             io.Writer
 }
 
@@ -181,7 +181,7 @@ func newParser(text []byte, out io.Writer) *parser {
 	p := &parser{
 		names:     make(map[string]bits),
 		registers: make(map[string]bits),
-		bitByBit:  make(map[string][]interface{}),
+		bitByBit:  make(map[string][]any),
 		scanner:   newScanner(text),
 		w:         out,
 	}
@@ -387,7 +387,7 @@ func (p *parser) parseAssign() {
 func (p *parser) parseAssignBitByBit(name string) {
 	size := p.names[name].size
 	if _, ok := p.bitByBit[name]; !ok {
-		p.bitByBit[name] = make([]interface{}, size)
+		p.bitByBit[name] = make([]any, size)
 	}
 	idx := p.int()
 	p.skipOver("]")
@@ -634,7 +634,7 @@ func (p *parser) size(a, b bits) int {
 	return b.size
 }
 
-func (p *parser) errorf(format string, a ...interface{}) parseError {
+func (p *parser) errorf(format string, a ...any) parseError {
 	return parseError{message: fmt.Sprintf(format, a...)}
 }
 
@@ -648,7 +648,7 @@ func (e parseError) Error() string {
 
 type bits struct {
 	size  int
-	value interface{}
+	value any
 }
 
 func (b bits) String() string {
@@ -693,7 +693,7 @@ func check(err error) {
 	}
 }
 
-func fail(msg interface{}) {
+func fail(msg any) {
 	_, _ = fmt.Fprintln(os.Stderr, msg)
 	os.Exit(1)
 }
