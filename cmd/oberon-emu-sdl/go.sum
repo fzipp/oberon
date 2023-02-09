@@ -1,4 +1,4 @@
 github.com/fzipp/oberon v0.3.0 h1:SLiLumqPHoK3XDRgMnNEZ0a13h8VgHcWazbePLRU2QY=
 github.com/fzipp/oberon v0.3.0/go.mod h1:oYuMFsCTnNCKtYbC9RLFixf1sBXBjrXZ3V0bAOnCBLU=
-github.com/veandco/go-sdl2 v0.4.31 h1:hANDTXYfoRiFrDDD4OkkTBQHCMhXgQnXl1IXC/V9Jbc=
-github.com/veandco/go-sdl2 v0.4.31/go.mod h1:OROqMhHD43nT4/i9crJukyVecjPNYYuCofep6SNiAjY=
+github.com/veandco/go-sdl2 v0.4.32 h1:IB8NGSlpBx64KV0IYSB6tG7S9/eBLm1b+Pel3PPD9GM=
+github.com/veandco/go-sdl2 v0.4.32/go.mod h1:OROqMhHD43nT4/i9crJukyVecjPNYYuCofep6SNiAjY=
