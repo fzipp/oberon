@@ -1,13 +1,25 @@
 # Project Oberon RISC Emulator
 
 This is an emulator for the [Project Oberon (Revised Edition 2013)](https://people.inf.ethz.ch/wirth/ProjectOberon/index.html)
-RISC5 processor, written in the [Go programming language](https://golang.org).
+RISC processor, written in the [Go programming language](https://golang.org).
 It is a port of [Peter De Wachter's emulator](https://github.com/pdewacht/oberon-risc-emu) from C to Go.
 
 Project Oberon is a design for a complete desktop computer system from scratch by
 [Niklaus Wirth](https://people.inf.ethz.ch/wirth/) and
 [Jürg Gutknecht](https://en.wikipedia.org/wiki/J%C3%BCrg_Gutknecht).
-It comprises a RISC CPU, a programming language and an operating system.
+Its simplicity and clarity enables a single person
+to know and implement the whole system.
+This makes Project Oberon a great educational tool. It consists of:
+- a RISC CPU design
+- a programming language with a compiler written in itself
+- an operating system with a text-oriented, mouse-controlled graphical user interface,
+  written in the Oberon programming language.
+
+If you like this project then you should also check out
+[this Oberon compiler in Go](https://github.com/fzipp/oberon-compiler)
+which is a direct port of Wirth's compiler for the RISC architecture
+from Oberon to the Go programming language.
+Of course, you can also use the original compiler in the emulator itself.
 
 ## Install
 
@@ -52,12 +64,25 @@ the keyboard.
 | Esc   | Undo all selections |
 | F1    | Set global marker   |
 
-## Oberon Compiler
+## About the Oberon language
 
-Project Oberon contains Wirth's Oberon compiler written in Oberon.
-If you're interested in an Oberon compiler written in Go check out
-[oberon-compiler](https://github.com/fzipp/oberon-compiler), which is a port
-of Wirth's compiler to Go.
+Oberon is the latest programming language
+in Wirth's succession of language designs,
+with predecessors like Pascal and Modula.
+There are also various versions and dialects of these three languages.
+Wirth strives to make the language simpler whenever possible.
+
+Oberon's grammar is designed in such a way that it is possible to
+implement it with a single-pass compiler.
+Oberon code is structured as modules that can be compiled separately.
+The language is statically typed and it uses a garbage collector for memory management.
+Access to low-level and unsafe facilities is possible through a
+designated SYSTEM module.
+
+Oberon also influenced some aspects of Go, as Robert Griesemer,
+one of the original creators of Go,
+[explains in his GopherCon 2015 talk](https://www.youtube.com/watch?v=0ReKdcpNyQg&t=1070s)
+"The Evolution of Go".
 
 ## License
 
