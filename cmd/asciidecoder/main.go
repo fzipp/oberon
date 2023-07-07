@@ -2,7 +2,15 @@
 // Use of this source code is governed by the ISC license that
 // can be found in the LICENSE file.
 
-// Command asciidecoder decodes Oberon 'AsciiCoder.DecodeFiles' archives.
+// Command asciidecoder extracts the files from an Oberon AsciiCoder archive,
+// like the Oberon command AsciiCoder.DecodeFiles would.
+//
+//	Usage:
+//	    asciidecoder [-v] [-C dir] [archive_file]
+//
+//	Flags:
+//	    -v  Verbose output: prints the name of each extracted file.
+//	    -C  Output directory, created if it does not exist yet.
 package main
 
 import (
