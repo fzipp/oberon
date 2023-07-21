@@ -207,7 +207,8 @@ func main() {
 		r.SetTime(uint32(frameStart))
 		err = r.Run(cpuHz / fps)
 		if err != nil {
-			if riscErr, ok := err.(*risc.Error); ok {
+			var riscErr *risc.Error
+			if errors.As(err, &riscErr) {
 				_, _ = fmt.Fprintf(os.Stderr, "%s (PC=0x%08X)\n", riscErr, riscErr.PC)
 			} else {
 				_, _ = fmt.Fprintln(os.Stderr, err)
