@@ -3,7 +3,7 @@
 This is an emulator for the
 [Project Oberon (Revised Edition 2013)](https://people.inf.ethz.ch/wirth/ProjectOberon/index.html)
 RISC processor,
-written in the [Go programming language](https://golang.org).
+written in the [Go programming language](https://go.dev).
 It is a port of
 [Peter De Wachter's C-based emulator](https://github.com/pdewacht/oberon-risc-emu)
 to Go.
