@@ -269,7 +269,7 @@ func updateTexture(fb *risc.Framebuffer, damage image.Rectangle, texture *sdl.Te
 		lineStart := line * (int(riscRect.W) / 32)
 		for col := damage.Min.X; col <= damage.Max.X; col++ {
 			pixels := fb.Pix[lineStart+col]
-			for b := 0; b < 32; b++ {
+			for range 32 {
 				var color uint32
 				if pixels&1 > 0 {
 					color = colorWhite
@@ -298,7 +298,7 @@ func bestDisplay(rect sdl.Rect) (int, error) {
 	if err != nil {
 		return best, err
 	}
-	for i := 0; i < displayCnt; i++ {
+	for i := range displayCnt {
 		bounds, err := sdl.GetDisplayBounds(i)
 		if err != nil {
 			return best, err

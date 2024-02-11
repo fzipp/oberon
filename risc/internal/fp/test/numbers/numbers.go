@@ -52,7 +52,7 @@ func main() {
 		numbers = append(numbers, x|0x80000000)
 	}
 	restCount := count - len(numbers)
-	for x := 0; x < restCount; x++ {
+	for range restCount {
 		numbers = append(numbers, rand.Uint32())
 	}
 

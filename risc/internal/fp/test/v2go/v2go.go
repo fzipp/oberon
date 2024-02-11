@@ -404,7 +404,7 @@ func (p *parser) parseAssignBitByBit(name string) {
 		}
 	}
 	var parts []string
-	for i := 0; i < size; i++ {
+	for i := range size {
 		parts = append(parts, fmt.Sprintf("((%v & 1) << %d)", p.bitByBit[name][i], i))
 	}
 	reverseSlice(parts)
@@ -548,7 +548,7 @@ func (p *parser) parseExprRepeat() bits {
 		panic(p.errorf("can only repeat 1-bit values"))
 	}
 	var parts []string
-	for i := 0; i < count; i++ {
+	for i := range count {
 		parts = append(parts, fmt.Sprintf("((%v & 1) << %d)", expr.value, i))
 	}
 	return bits{size: count, value: fmt.Sprintf("(%s)", strings.Join(parts, " | "))}

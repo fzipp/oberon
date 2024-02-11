@@ -180,7 +180,7 @@ func Idiv(x, y uint32, signedDiv bool) IdivResult {
 	}
 
 	RQ := uint64(x0)
-	for S := 0; S < 32; S++ {
+	for range 32 {
 		w0 := uint32(RQ >> 31)
 		w1 := w0 - y
 		if int32(w1) < 0 {

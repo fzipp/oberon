@@ -152,7 +152,7 @@ func decompress(r *bufio.Reader) ([]byte, error) {
 	var buf uint32
 	bits := 0
 
-	for i := 0; i < size; i++ {
+	for range size {
 		if bits == 0 {
 			b, err := r.ReadByte()
 			if err != nil {

@@ -66,7 +66,7 @@ func (ctx *Context) UpdateDisplay(fb *risc.Framebuffer, r image.Rectangle) {
 		lineStart := line * (cw / 32)
 		for col := r.Min.X; col <= r.Max.X; col++ {
 			pixels := fb.Pix[lineStart+col]
-			for b := 0; b < 32; b++ {
+			for range 32 {
 				var color uint32
 				if pixels&1 > 0 {
 					color = colorWhite

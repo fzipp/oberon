@@ -163,7 +163,7 @@ func readSector(r io.Reader, buf []uint32) error {
 	if err != nil && err != io.EOF {
 		return fmt.Errorf("can't read bytes: %w", err)
 	}
-	for i := 0; i < 128; i++ {
+	for i := range 128 {
 		buf[i] = uint32(bytes[i*4+0]) |
 			(uint32(bytes[i*4+1]) << 8) |
 			(uint32(bytes[i*4+2]) << 16) |
@@ -174,7 +174,7 @@ func readSector(r io.Reader, buf []uint32) error {
 
 func writeSector(w io.Writer, buf []uint32) error {
 	var bytes [512]byte
-	for i := 0; i < 128; i++ {
+	for i := range 128 {
 		bytes[i*4+0] = uint8(buf[i])
 		bytes[i*4+1] = uint8(buf[i] >> 8)
 		bytes[i*4+2] = uint8(buf[i] >> 16)
