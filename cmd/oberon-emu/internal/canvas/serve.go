@@ -38,11 +38,11 @@ func ListenAndServe(addr string, run func(*Context), size image.Rectangle) error
 
 func newServeMux(run func(*Context), config config) *http.ServeMux {
 	mux := http.NewServeMux()
-	mux.Handle("/", &htmlHandler{
+	mux.Handle("GET /", &htmlHandler{
 		config: config,
 	})
-	mux.HandleFunc("/canvas-websocket.js", javaScriptHandler)
-	mux.Handle("/draw", &drawHandler{
+	mux.HandleFunc("GET /canvas-websocket.js", javaScriptHandler)
+	mux.Handle("GET /draw", &drawHandler{
 		config: config,
 		draw:   run,
 	})
