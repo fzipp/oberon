@@ -10,7 +10,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"os"
 )
 
@@ -43,7 +43,7 @@ func main() {
 
 	var numbers []uint32
 	for e := uint32(0); e < 256; e++ {
-		numbers = append(numbers, (e<<23)|0)
+		numbers = append(numbers, e<<23)
 		numbers = append(numbers, (e<<23)|1)
 		numbers = append(numbers, (e<<23)|0x7fffff)
 		numbers = append(numbers, (e<<23)|0x7ffffe)
