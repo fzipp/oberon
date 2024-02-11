@@ -42,7 +42,7 @@ func main() {
 	}
 
 	var numbers []uint32
-	for e := uint32(0); e < 256; e++ {
+	for e := range uint32(256) {
 		numbers = append(numbers, e<<23)
 		numbers = append(numbers, (e<<23)|1)
 		numbers = append(numbers, (e<<23)|0x7fffff)
