@@ -75,6 +75,14 @@ func (buf *buffer) readString() string {
 	return s
 }
 
+func (buf *buffer) skip(nBytes int) {
+	if len(buf.bytes) < nBytes {
+		buf.dataTooShort()
+		return
+	}
+	buf.bytes = buf.bytes[nBytes:]
+}
+
 func (buf *buffer) reset() {
 	buf.bytes = make([]byte, 0, cap(buf.bytes))
 }

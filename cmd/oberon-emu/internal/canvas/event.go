@@ -396,10 +396,15 @@ func decodeTouchEvent(buf *buffer) TouchEvent {
 }
 
 func decodeTouchList(buf *buffer) TouchList {
+	const maxTouchListLength = 10
 	length := buf.readByte()
-	list := make(TouchList, length)
+	limitedLength := min(length, maxTouchListLength)
+	list := make(TouchList, limitedLength)
 	for i := range list {
 		list[i] = decodeTouch(buf)
+	}
+	if limitedLength < length {
+		buf.skip(int(length - limitedLength))
 	}
 	return list
 }
