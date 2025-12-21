@@ -13,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode"
@@ -108,10 +109,8 @@ func (s *scanner) next() (token string, value any) {
 	}
 	s.skipWhitespaceAndComments(s.pos + end)
 	if w, ok := groups["word"]; ok {
-		for _, kw := range keywords {
-			if w == kw {
-				return w, ""
-			}
+		if slices.Contains(keywords, w) {
+			return w, ""
 		}
 		return "<name>", w
 	} else if _, ok = groups["bits"]; ok {
@@ -207,11 +206,9 @@ func (p *parser) skipOver(token string) {
 }
 
 func (p *parser) skippingOver(tokens ...string) bool {
-	for _, tok := range tokens {
-		if tok == p.token {
-			p.nextToken()
-			return true
-		}
+	if slices.Contains(tokens, p.token) {
+		p.nextToken()
+		return true
 	}
 	return false
 }
