@@ -1,3 +1,3 @@
 module github.com/fzipp/oberon
 
-go 1.22.0
+go 1.25.0
